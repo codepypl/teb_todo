@@ -31,3 +31,12 @@ class EditProjectDialog(QDialog):
         layout.addWidget(self.priority_label)
         layout.addWidget(self.priority_input)
         self.priority_input.setCurrentText(project.priority.name)
+
+        self.category_label = QLabel("Kategoria:")
+        self.category_input = QComboBox()
+        categories = session.query(Category).all()
+        for category in categories:
+            self.category_input.addItem(str(category.name))
+        layout.addWidget(self.category_label)
+        layout.addWidget(self.category_input)
+        self.category_input.setCurrentText(project.category.name)
