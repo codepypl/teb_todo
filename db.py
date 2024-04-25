@@ -20,3 +20,10 @@ class Priority(Base):
     __tablename__ = 'priorities'
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
+
+class Task(Base):
+    __tablename__ = 'tasks'
+    id = Column(Integer, primary_key=True)
+    name = Column(String, nullable=False)
+    project_id = Column(Integer, ForeignKey('projects.id'))
+    completed = Column(Boolean, default=False)
