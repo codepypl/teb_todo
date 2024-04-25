@@ -78,3 +78,21 @@ class TaskManagerApp(QMainWindow):
         project_widget.setLayout(project_layout)
 
         return project_widget
+
+    def add_project(self):
+        categories = [category.name for category in session.query(Category).all()]
+        priorities = [priority.name for priority in session.query(Priority).all()]
+        dialog = AddProjectDialog(categories, priorities)
+        if dialog.exec():
+            self.load_projects()
+
+    def edit_project(self, project):
+        dialog = EditProjectDialog(project)
+        if dialog.exec():
+            self.load_projects()
+
+    def remove_project(self, project):
+        session.delete(project)
+        session.commit()
+        self.load_projects()
+
