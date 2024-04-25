@@ -54,3 +54,31 @@ class EditProjectDialog(QDialog):
         layout.addWidget(self.save_button)
 
         self.setLayout(layout)
+
+    def save_project(self):
+        name = self.name_input.text().strip()
+        description = self.description_input.toPlainText().strip()
+        priority = self.priority_input.currentText()
+        category = self.category_input.currentText()
+        deadline = self.deadline_input.date().toPython()
+
+        if not name:
+            QMessageBox.warning(self, "Błąd", "Nazwa projektu nie może być pusta.")
+            return
+        if not description:
+            QMessageBox.warning(self, "Błąd", "Opis projektu nie może być pusty.")
+            return
+        if deadline < QDate.currentDate().toPython():
+            QMessageBox.warning(self, "Błąd", "Data zakończenia projektu nie może być wcześniejsza niż obecna data.")
+            return
+
+        priority_id = session.query(Priority).filter_by(name=priority).first().id
+        category_id = session.query(Category).filter_by(name=category).first().id
+
+        self.project.name = name
+        self.project.description = description
+        self.project.priority_id = priority_id
+        self.project.category_id = category_id
+        self.project.deadline = deadline
+        session.commit()
+        self.accept()
