@@ -18,3 +18,9 @@ class AddProjectDialog(QDialog):
         self.description_input = QTextEdit()
         layout.addWidget(self.description_label)
         layout.addWidget(self.description_input)
+
+        self.priority_label = QLabel("Priorytet:")
+        self.priority_input = QComboBox()
+        self.priority_input.addItems(priorities)
+        layout.addWidget(self.priority_label)
+        layout.addWidget(self.priority_input)
