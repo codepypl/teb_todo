@@ -24,6 +24,11 @@ class CategoryManagerApp(QDialog):
         self.edit_button = QPushButton("Edytuj kategorię")
         self.edit_button.clicked.connect(self.edit_category)
         layout.addWidget(self.edit_button)
+
+        self.remove_button = QPushButton("Usuń kategorię")
+        self.remove_button.clicked.connect(self.remove_category)
+        layout.addWidget(self.remove_button)
+
     def load_categories(self):
         self.category_list.clear()
         categories = session.query(Category).all()
@@ -50,4 +55,15 @@ class CategoryManagerApp(QDialog):
                     category.name = new_category_name
                     session.commit()
                     self.load_categories()
+    def remove_category(self):
+        selected_item = self.category_list.currentItem()
+        if selected_item:
+            category_name = selected_item.text()
+            category = session.query(Category).filter_by(name=category_name).first()
+            if category:
+                session.delete(category)
+                session.commit()
+                self.load_categories()
+
+
 
