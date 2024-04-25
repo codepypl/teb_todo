@@ -9,3 +9,9 @@ engine = create_engine('sqlite:///task_manager.db', echo=False)
 # Tworzenie sesji
 Session = sessionmaker(bind=engine)
 session = Session()
+
+
+class Category(Base):
+    __tablename__ = 'categories'
+    id = Column(Integer, primary_key=True)
+    name = Column(String, nullable=False)
