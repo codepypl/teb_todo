@@ -24,3 +24,9 @@ class AddProjectDialog(QDialog):
         self.priority_input.addItems(priorities)
         layout.addWidget(self.priority_label)
         layout.addWidget(self.priority_input)
+
+        self.category_label = QLabel("Kategoria:")
+        self.category_input = QComboBox()
+        self.category_input.addItems(categories)
+        layout.addWidget(self.category_label)
+        layout.addWidget(self.category_input)
