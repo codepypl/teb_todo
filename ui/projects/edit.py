@@ -17,3 +17,8 @@ class EditProjectDialog(QDialog):
         self.name_input = QLineEdit(project.name)
         layout.addWidget(self.name_label)
         layout.addWidget(self.name_input)
+
+        self.description_label = QLabel("Opis projektu:")
+        self.description_input = QTextEdit(project.description)
+        layout.addWidget(self.description_label)
+        layout.addWidget(self.description_input)
