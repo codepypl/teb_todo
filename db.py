@@ -39,3 +39,5 @@ class Project(Base):
     category = relationship("Category")
     deadline = Column(Date)
     tasks = relationship("Task", backref="project")
+
+    Base.metadata.create_all(engine)
