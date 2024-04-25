@@ -52,3 +52,29 @@ class TaskManagerApp(QMainWindow):
             listWidgetItem.setSizeHint(project_widget.sizeHint())
             self.project_list.addItem(listWidgetItem)
             self.project_list.setItemWidget(listWidgetItem, project_widget)
+
+    def create_project_widget(self, project):
+        project_widget = QWidget()
+        project_layout = QHBoxLayout()
+
+        project_name_label = QLabel(str(project.name))
+        project_layout.addWidget(project_name_label)
+
+        progress_bar = QProgressBar()
+        progress_bar.setValue(self.calculate_progress(project))
+        progress_bar.setMaximumWidth(100)  # Ustawienie maksymalnej szerokości
+        project_layout.addWidget(progress_bar)
+
+        project_widget.setLayout(project_layout)
+
+        edit_button = QPushButton("Edytuj")
+        edit_button.clicked.connect(lambda _, p=project: self.edit_project(p))
+        project_layout.addWidget(edit_button)
+
+        remove_button = QPushButton("Usuń")
+        remove_button.clicked.connect(lambda _, p=project: self.remove_project(p))
+        project_layout.addWidget(remove_button)
+
+        project_widget.setLayout(project_layout)
+
+        return project_widget
