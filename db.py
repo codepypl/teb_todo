@@ -15,3 +15,8 @@ class Category(Base):
     __tablename__ = 'categories'
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
+
+class Priority(Base):
+    __tablename__ = 'priorities'
+    id = Column(Integer, primary_key=True)
+    name = Column(String, nullable=False)
