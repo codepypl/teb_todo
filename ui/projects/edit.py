@@ -40,3 +40,9 @@ class EditProjectDialog(QDialog):
         layout.addWidget(self.category_label)
         layout.addWidget(self.category_input)
         self.category_input.setCurrentText(project.category.name)
+
+        self.deadline_label = QLabel("Data zakończenia:")
+        self.deadline_input = QDateEdit(project.deadline)
+        self.deadline_input.setCalendarPopup(True)
+        layout.addWidget(self.deadline_label)
+        layout.addWidget(self.deadline_input)
