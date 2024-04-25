@@ -43,3 +43,20 @@ class AddProjectDialog(QDialog):
         layout.addWidget(self.save_button)
 
         self.setLayout(layout)
+
+    def save_project(self):
+        name = self.name_input.text().strip()
+        description = self.description_input.toPlainText().strip()
+        priority = self.priority_input.currentText()
+        category = self.category_input.currentText()
+        deadline = self.deadline_input.date().toPython()
+
+        priority_id = session.query(Priority).filter_by(name=priority).first().id
+        category_id = session.query(Category).filter_by(name=category).first().id
+
+        new_project = Project(name=name, description=description, priority_id=priority_id,
+                              category_id=category_id, deadline=deadline)
+        session.add(new_project)
+        session.commit()
+        self.accept()
+
