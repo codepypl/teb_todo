@@ -30,3 +30,10 @@ class AddProjectDialog(QDialog):
         self.category_input.addItems(categories)
         layout.addWidget(self.category_label)
         layout.addWidget(self.category_input)
+
+        self.deadline_label = QLabel("Data zakończenia:")
+        self.deadline_input = QDateEdit()
+        self.deadline_input.setDate(QDate.currentDate())
+        self.deadline_input.setCalendarPopup(True)
+        layout.addWidget(self.deadline_label)
+        layout.addWidget(self.deadline_input)
