@@ -21,6 +21,10 @@ class PriorityManagerApp(QDialog):
         self.add_button.clicked.connect(self.add_priority)
         layout.addWidget(self.add_button)
 
+        self.edit_button = QPushButton("Edytuj priorytet")
+        self.edit_button.clicked.connect(self.edit_priority)
+        layout.addWidget(self.edit_button)
+
         self.setLayout(layout)
     def load_priorities(self):
         self.priority_list.clear()
@@ -35,3 +39,16 @@ class PriorityManagerApp(QDialog):
             session.add(new_priority)
             session.commit()
             self.load_priorities()
+
+    def edit_priority(self):
+        selected_item = self.priority_list.currentItem()
+        if selected_item:
+            priority_name = selected_item.text()
+            new_priority_name, ok = QInputDialog.getText(self, 'Edytuj priorytet', 'Wpisz nową nazwę priorytetu:',
+                                                         QLineEdit.Normal, priority_name)
+            if ok and new_priority_name:
+                priority = session.query(Priority).filter_by(name=priority_name).first()
+                if priority:
+                    priority.name = new_priority_name
+                    session.commit()
+                    self.load_priorities()
