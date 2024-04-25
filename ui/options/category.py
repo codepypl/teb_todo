@@ -20,6 +20,10 @@ class CategoryManagerApp(QDialog):
         self.add_button = QPushButton("Dodaj kategorię")
         self.add_button.clicked.connect(self.add_category)
         layout.addWidget(self.add_button)
+
+        self.edit_button = QPushButton("Edytuj kategorię")
+        self.edit_button.clicked.connect(self.edit_category)
+        layout.addWidget(self.edit_button)
     def load_categories(self):
         self.category_list.clear()
         categories = session.query(Category).all()
@@ -33,3 +37,17 @@ class CategoryManagerApp(QDialog):
             session.add(new_category)
             session.commit()
             self.load_categories()
+
+    def edit_category(self):
+        selected_item = self.category_list.currentItem()
+        if selected_item:
+            category_name = selected_item.text()
+            new_category_name, ok = QInputDialog.getText(self, 'Edytuj kategorię', 'Wpisz nową nazwę kategorii:',
+                                                         QLineEdit.Normal, category_name)
+            if ok and new_category_name:
+                category = session.query(Category).filter_by(name=category_name).first()
+                if category:
+                    category.name = new_category_name
+                    session.commit()
+                    self.load_categories()
+
