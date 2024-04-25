@@ -79,6 +79,15 @@ class TaskManagerApp(QMainWindow):
 
         return project_widget
 
+    def calculate_progress(self, project):
+        total_tasks = session.query(Task).filter_by(project_id=project.id).count()
+        completed_tasks = session.query(Task).filter_by(project_id=project.id, completed=True).count()
+        if total_tasks > 0:
+            progress = (completed_tasks / total_tasks) * 100
+        else:
+            progress = 0
+        return progress
+
     def add_project(self):
         categories = [category.name for category in session.query(Category).all()]
         priorities = [priority.name for priority in session.query(Priority).all()]
