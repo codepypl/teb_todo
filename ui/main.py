@@ -96,3 +96,11 @@ class TaskManagerApp(QMainWindow):
         session.commit()
         self.load_projects()
 
+    def manage_categories(self):
+        dialog = CategoryManagerApp()
+        dialog.exec()
+
+    def manage_priorities(self):
+        dialog = PriorityManagerApp()
+        dialog.exec()
+
