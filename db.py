@@ -27,3 +27,15 @@ class Task(Base):
     name = Column(String, nullable=False)
     project_id = Column(Integer, ForeignKey('projects.id'))
     completed = Column(Boolean, default=False)
+
+class Project(Base):
+    __tablename__ = 'projects'
+    id = Column(Integer, primary_key=True)
+    name = Column(String, nullable=False)
+    description = Column(String)
+    priority_id = Column(Integer, ForeignKey('priorities.id'))
+    priority = relationship("Priority")
+    category_id = Column(Integer, ForeignKey('categories.id'))
+    category = relationship("Category")
+    deadline = Column(Date)
+    tasks = relationship("Task", backref="project")
