@@ -29,6 +29,8 @@ class CategoryManagerApp(QDialog):
         self.remove_button.clicked.connect(self.remove_category)
         layout.addWidget(self.remove_button)
 
+        self.setLayout(layout)
+
     def load_categories(self):
         self.category_list.clear()
         categories = session.query(Category).all()
@@ -55,6 +57,7 @@ class CategoryManagerApp(QDialog):
                     category.name = new_category_name
                     session.commit()
                     self.load_categories()
+
     def remove_category(self):
         selected_item = self.category_list.currentItem()
         if selected_item:
@@ -64,6 +67,3 @@ class CategoryManagerApp(QDialog):
                 session.delete(category)
                 session.commit()
                 self.load_categories()
-
-
-
