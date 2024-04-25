@@ -41,6 +41,11 @@ class TaskManagerApp(QMainWindow):
         self.priority_button = QPushButton("Zarządzaj priorytetami")
         self.priority_button.clicked.connect(self.manage_priorities)
         layout.addWidget(self.priority_button)
+
+        self.report_button = (QPushButton("Generuj raport CSV"))
+        self.report_button.clicked.connect(self.generate_csv_report)
+        layout.addWidget(self.report_button)
+
         self.load_projects()
 
     def load_projects(self):
@@ -112,4 +117,30 @@ class TaskManagerApp(QMainWindow):
     def manage_priorities(self):
         dialog = PriorityManagerApp()
         dialog.exec()
+
+    def generate_csv_report(self):
+
+        projects = session.query(Project).all()
+
+        project_data = []
+
+        for project in projects:
+            tasks = session.query(Task).filter_by(project_id=project.id).all()
+            task_names = ', '.join([task.name for task in tasks])
+
+            project_data.append({
+                'Nazwa projektu': project.name,
+                'Opis projektu': project.description,
+                'Priorytet': project.priority.name,
+                'Data zakończenia': str(project.deadline),
+                'Zadania': task_names
+            })
+
+        df = pd.DataFrame(project_data)
+
+        df.to_csv('csv/raport.csv', index=False)
+
+        QMessageBox.information(self, "Raport wygenerowany",
+                                "Raport został wygenerowany i zapisany jako 'raport_projektow.csv'.")
+
 
