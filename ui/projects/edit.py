@@ -22,3 +22,12 @@ class EditProjectDialog(QDialog):
         self.description_input = QTextEdit(project.description)
         layout.addWidget(self.description_label)
         layout.addWidget(self.description_input)
+
+        self.priority_label = QLabel("Priorytet:")
+        self.priority_input = QComboBox()
+        priorities = session.query(Priority).all()
+        for priority in priorities:
+            self.priority_input.addItem(str(priority.name))
+        layout.addWidget(self.priority_label)
+        layout.addWidget(self.priority_input)
+        self.priority_input.setCurrentText(project.priority.name)
