@@ -47,6 +47,17 @@ class EditProjectDialog(QDialog):
         layout.addWidget(self.deadline_label)
         layout.addWidget(self.deadline_input)
 
+        self.task_widget = QWidget()
+        self.task_layout = QVBoxLayout()
+        self.tasks_label = QLabel("Lista zadań:")
+        self.task_widget.setLayout(self.task_layout)
+        layout.addWidget(self.tasks_label)
+        layout.addWidget(self.task_widget)
+
+        self.add_task_button = QPushButton("Dodaj zadanie")
+        self.add_task_button.clicked.connect(self.add_task)
+        layout.addWidget(self.add_task_button)
+
         self.load_tasks()
 
         self.save_button = QPushButton("Zapisz")
@@ -82,3 +93,31 @@ class EditProjectDialog(QDialog):
         self.project.deadline = deadline
         session.commit()
         self.accept()
+
+    def add_task(self):
+        task, ok = QInputDialog.getText(self, 'Dodaj zadanie', 'Opisz zadanie:')
+        if ok and task:
+            existing_tasks = [checkbox.text() for checkbox in self.task_layout.findChildren(QCheckBox)]
+            if task in existing_tasks:
+                QMessageBox.warning(self, "Błąd", "To zadanie już istnieje w projekcie.")
+                return
+            new_task = Task(name=task, project_id=self.project.id)
+            session.add(new_task)
+            session.commit()
+            self.load_tasks()
+
+    def load_tasks(self):
+        for i in reversed(range(self.task_layout.count())):
+            self.task_layout.itemAt(i).widget().setParent(None)
+
+        tasks = session.query(Task).filter_by(project_id=self.project.id)
+        for task in tasks:
+            checkbox = QCheckBox(str(task.name))
+            checkbox.setChecked(task.completed)
+            checkbox.stateChanged.connect(lambda state, t=task: self.update_task_status(state, t))
+            self.task_layout.addWidget(checkbox)
+
+    def update_task_status(self, state, task):
+        completed = bool(state)
+        task.completed = completed
+        session.commit()
