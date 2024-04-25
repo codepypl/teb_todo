@@ -51,6 +51,17 @@ class AddProjectDialog(QDialog):
         category = self.category_input.currentText()
         deadline = self.deadline_input.date().toPython()
 
+
+        if not name:
+            QMessageBox.warning(self, "Błąd", "Nazwa projektu nie może być pusta.")
+            return
+        if not description:
+            QMessageBox.warning(self, "Błąd", "Opis projektu nie może być pusty.")
+            return
+        if deadline < QDate.currentDate().toPython():
+            QMessageBox.warning(self, "Błąd", "Data zakończenia projektu nie może być wcześniejsza niż obecna data.")
+            return
+
         priority_id = session.query(Priority).filter_by(name=priority).first().id
         category_id = session.query(Category).filter_by(name=category).first().id
 
