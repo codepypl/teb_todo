@@ -40,4 +40,5 @@ class Project(Base):
     deadline = Column(Date)
     tasks = relationship("Task", backref="project")
 
-    Base.metadata.create_all(engine)
+
+Base.metadata.create_all(engine)
