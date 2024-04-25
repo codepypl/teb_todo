@@ -25,6 +25,11 @@ class PriorityManagerApp(QDialog):
         self.edit_button.clicked.connect(self.edit_priority)
         layout.addWidget(self.edit_button)
 
+        self.remove_button = QPushButton("Usuń priorytet")
+        self.remove_button.clicked.connect(self.remove_priority)
+        layout.addWidget(self.remove_button)
+
+
         self.setLayout(layout)
     def load_priorities(self):
         self.priority_list.clear()
@@ -52,3 +57,13 @@ class PriorityManagerApp(QDialog):
                     priority.name = new_priority_name
                     session.commit()
                     self.load_priorities()
+
+    def remove_priority(self):
+        selected_item = self.priority_list.currentItem()
+        if selected_item:
+            priority_name = selected_item.text()
+            priority = session.query(Priority).filter_by(name=priority_name).first()
+            if priority:
+                session.delete(priority)
+                session.commit()
+                self.load_priorities()
