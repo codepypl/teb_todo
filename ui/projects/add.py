@@ -37,3 +37,9 @@ class AddProjectDialog(QDialog):
         self.deadline_input.setCalendarPopup(True)
         layout.addWidget(self.deadline_label)
         layout.addWidget(self.deadline_input)
+
+        self.save_button = QPushButton("Zapisz")
+        self.save_button.clicked.connect(self.save_project)
+        layout.addWidget(self.save_button)
+
+        self.setLayout(layout)
